@@ -1,0 +1,97 @@
+<?php
+/**
+ * Chronolabs Fonting Repository Services REST API API
+ *
+ * You may not change or alter any portion of this comment or credits
+ * of supporting developers from this source code or any supporting source code
+ * which is considered copyrighted (c) material of the original comment or credit authors.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * @copyright       Chronolabs Cooperative http://labs.coop
+ * @license         General Public License version 3 (http://labs.coop/briefs/legal/general-public-licence/13,3.html)
+ * @package         fonts
+ * @since           2.1.9
+ * @author          Simon Roberts <wishcraft@users.sourceforge.net>
+ * @subpackage		api
+ * @description		Fonting Repository Services REST API
+ * @link			http://sourceforge.net/projects/chronolabsapis
+ * @link			http://cipher.labs.coop
+ */
+
+	
+	$action = in_array($_REQUEST['action'], array('uploaded', 'fields-mapping'))
+				?$_REQUEST['action']
+				:die("Unknown Action Specified");
+	
+	switch($action)
+	{
+		/**
+		 * When an font already exist and need not be converted or surveyed this callback occures
+		 * 
+		 * Variables:
+		 * 
+		 *     (string) 	$_POST['filename'] = The Actual Upload Filename of the CSV
+		 *     (string) 	$_POST['file-md5'] = The Actual MD5 of the CSV Uploaded
+		 *     (string) 	$_POST['import-id'] = The fingerprint MD5 for the Import
+		 *     (string) 	$_POST['email-id'] = The fingerprint MD5 for the email
+		 *     (string) 	$_POST['email'] = The data for the email
+		 *     (string) 	$_POST['name'] = Md5 checksum for the filename on callback
+		 *     (string) 	$_POST['peer-id'] = Md5 checksum for the Peer on callback
+		 */
+		case 'uploaded':
+			
+			break;
+			
+		/**
+		 * When an font already exist and need not be converted or surveyed this callback occures
+		 * 
+		 * Variables:
+		 * 
+		 *     (string) 	$_POST['import-id'] = The Actual Upload Import Fingerprint MD5 of the CSV
+		 *     (string) 	$_POST['maps-id'] = The Actual Field Mapping MD5 of the CSV's Uploaded
+		 *     (array) 		$_POST['fields'] = The fields to be mapped for the import
+		 *     (string) 	$_POST['email-id'] = The fingerprint MD5 for the email contacted for the mapping
+		 *     (string) 	$_POST['email'] = The email address contacted for the mapping
+		 *     (string) 	$_POST['link'] = The mapping fields URI/URL for editing provided in email
+		 *     (string) 	$_POST['peer-id'] = Md5 checksum for the Peer on callback
+		 */
+		case 'fields-mapping':
+			
+			break;
+				
+		/**
+		 * When an font already exist and need not be converted or surveyed this callback occures
+		 * 
+		 * Variables:
+		 * 
+		 *     (string) 	$_POST['import-id'] = The Actual Upload Import Fingerprint MD5 of the CSV
+		 *     (string) 	$_POST['maps-id'] = The Actual Field Mapping MD5 of the CSV's Uploaded
+		 *     (array) 		$_POST['codes'] = The Category Codes to be mapped for the import
+		 *     (string) 	$_POST['email-id'] = The fingerprint MD5 for the email contacted for the mapping
+		 *     (string) 	$_POST['email'] = The email address contacted for the mapping
+		 *     (string) 	$_POST['link'] = The mapping fields URI/URL for editing provided in email
+		 *     (string) 	$_POST['peer-id'] = Md5 checksum for the Peer on callback
+		 */
+		case 'categories-mapping':
+			
+			break;
+				
+		/**
+		 * When an font already exist and need not be converted or surveyed this callback occures
+		 * 
+		 * Variables:
+		 * 
+		 *     (string) 	$_POST['import-id'] = The Actual Upload Import Fingerprint MD5 of the CSV
+		 *     (array) 		$_POST['entities'] = The Fingerprint's and Top Layer Data of the Import
+		 *     (float) 		$_POST['seconds-taken'] = The number of seconds taken to import the CSV
+		 *     (date/time) 	$_POST['started'] = The date time string when the import started
+		 *     (string) 	$_POST['peer-id'] = Md5 checksum for the Peer on callback
+		 */
+		case 'imported':
+			
+			break;
+					
+	}
+?>
