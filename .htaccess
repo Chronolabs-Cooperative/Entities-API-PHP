@@ -4,45 +4,45 @@ php_value post_max_size 1456M
 php_value error_reporting 1
 php_value diaplay_errors 1
 
-### NEED TO ADJUST SUBDOMAINS IN THE LOWER LINE OF CODE FOR SHORT URL WITH A WILD CARD cName in the DOMAINS ZONE as *.entities.labs.coop
-### This needs to point to Entities.labs.coop for example or the same for entities.localhost
+### NEED TO ADJUST SUBDOMAINS IN THE LOWER LINE OF CODE FOR SHORT URL WITH A WILD CARD cName in the DOMAINS ZONE as *.entities.snails.email
+### This needs to point to Entities.snails.email for example or the same for entities.localhost
 ##
 RewriteEngine On
-RewriteCond %{HTTP_HOST} 																						^(.*?).(entities.localhost|entities.labs.coop)$
-RewriteRule ^logo.png$																							logo-verify.php?version=v2&state=referer							[L,NC,QSA]
-RewriteRule ^(small|medium|large)/avatar.(gif|jpg|png)$															avatar.php?version=v2&mode=$2&clause=$1&state=referer	 			[L,NC,QSA]
-RewriteRule ^([0-9]{5})x([0-9]{5})/avatar.(gif|jpg|png)$														avatar.php?version=v2&mode=$3&state=referer&width=$1&height=$2	 	[L,NC,QSA]
-RewriteRule ^([0-9]{5})/avatar.(gif|jpg|png)$																	avatar.php?version=v2&mode=$1&state=referer&width=$1&height=$1	 	[L,NC,QSA]
-RewriteRule ^avatar.(gif|jpg|png)$																				avatar.php?version=v2&mode=$1&state=referer&clause=small	 		[L,NC,QSA]
-RewriteRule ^vcf$																								download.php?version=v2&mode=vcf&state=referer						[L,NC,QSA]
-RewriteRule ^edit.api$																							entity-edit.php?version=v2&state=referer							[L,NC,QSA]
-RewriteRule ^view.api$																							entity-view.php?version=v2&state=referer							[L,NC,QSA]
+RewriteCond %{HTTP_HOST} ^(.*?).(entities.localhost|entities.snails.email)$
+RewriteRule ^logo.png logo-verify.php?version=v2&state=referer [L,NC,QSA]
+RewriteRule ^(small|medium|large)/avatar.(gif|jpg|png)$ avatar.php?version=v2&mode=$2&clause=$1&state=referer [L,NC,QSA]
+RewriteRule ^([0-9]{5})x([0-9]{5})/avatar.(gif|jpg|png)$ avatar.php?version=v2&mode=$3&state=referer&width=$1&height=$2 [L,NC,QSA]
+RewriteRule ^([0-9]{5})/avatar.(gif|jpg|png)$ avatar.php?version=v2&mode=$1&state=referer&width=$1&height=$1 [L,NC,QSA]
+RewriteRule ^avatar.(gif|jpg|png)$ avatar.php?version=v2&mode=$1&state=referer&clause=small [L,NC,QSA]
+RewriteRule ^vcf$ download.php?version=v2&mode=vcf&state=referer [L,NC,QSA]
+RewriteRule ^edit.api$ entity-edit.php?version=v2&state=referer [L,NC,QSA]
+RewriteRule ^view.api$ entity-view.php?version=v2&state=referer [L,NC,QSA]
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-z0-9]{2})/(uploads|edit)/forms.api$															forms.php?version=$1&mode=$2&clause=$3&state=$4&output=forms&name=$6&$7		[L,NC,QSA]				
-RewriteRule ^([a-z0-9]{2})/(.*?)/(small|medium|large)/avatar.(gif|jpg|png)$										avatar.php?version=$1&mode=$4&clause=$3&state=$2	 				[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/([0-9]{5})x([0-9]{5})/avatar.(gif|jpg|png)$									avatar.php?version=$1&mode=$5&clause=$2&width=$3&height=$4	 		[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/([0-9]{5})/avatar.(gif|jpg|png)$												avatar.php?version=$1&mode=$4&clause=$2&width=$3&height=$3	 		[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/avatar.(gif|jpg|png)$															avatar.php?version=$1&mode=$3&clause=$2	 							[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/logo.png$																		logo-verify.php?version=$1&hash=$2									[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/callback.api$																	callback.php?version=$1&mode=$2										[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/upload.api$																	upload.php?version=$1&field=$2										[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/edit.api$																		entity-edit.php?version=$1&mode=hash&clause=$2						[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/view.api$																		entity-view.php?version=$1&mode=hash&clause=$2						[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(mapping|categories)/(.*?)/(html).api$												$2.php?version=$1&mode=$2&clause=$3&state=&output=$4				[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view)/(new-password).api?(.*?)$ 											entity-$3-$4.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4	[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view)/(password|split).api$ 												entity-$3-$4.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4	[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view).api?(.*?)$ 														entity-$3.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4	[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api$								index.php?version=$1&mode=$2&clause=&state=&output=$3&				[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?)/(.*?).api?(.*?)$ 	index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&name=$6&$7 [L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?)/(.*?).api$			index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&name=$6	[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?).api?(.*?)$ 			index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&$6		[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?).api$	 				index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5			[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?).api?(.*?)$ 				index.php?version=$1&mode=$2&clause=$3&state=&output=$4&$5			[L,NC,QSA]	
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?).api$						index.php?version=$1&mode=$2&clause=$3&state=&output=$4				[L,NC,QSA]	
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api?(.*?)$ 						index.php?version=$1&mode=$2&clause=&state=&output=$3&$4			[L,NC,QSA]
-RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api$								index.php?version=$1&mode=$2&clause=&state=&output=$3&				[L,NC,QSA]
-RewriteRule ^callback-example.php$																				examples/callback-example.php.txt									[L,NC,QSA]
-RewriteRule ^(.*?).(css|txt|php|jpg|png|gif|ico)$																$1.$2																[L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(uploads|edit)/forms.api$ forms.php?version=$1&mode=$2&clause=$3&state=$4&output=forms&name=$6&$7 [L,NC,QSA] 
+RewriteRule ^([a-z0-9]{2})/(.*?)/(small|medium|large)/avatar.(gif|jpg|png)$ avatar.php?version=$1&mode=$4&clause=$3&state=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/([0-9]{5})x([0-9]{5})/avatar.(gif|jpg|png)$ avatar.php?version=$1&mode=$5&clause=$2&width=$3&height=$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/([0-9]{5})/avatar.(gif|jpg|png)$ avatar.php?version=$1&mode=$4&clause=$2&width=$3&height=$3 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/avatar.(gif|jpg|png)$ avatar.php?version=$1&mode=$3&clause=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/logo.png$ logo-verify.php?version=$1&hash=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/callback.api$ callback.php?version=$1&mode=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/upload.api$ upload.php?version=$1&field=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/edit.api$ entity-edit.php?version=$1&mode=hash&clause=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/view.api$ entity-view.php?version=$1&mode=hash&clause=$2 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(mapping|categories)/(.*?)/(html).api$ $2.php?version=$1&mode=$2&clause=$3&state=&output=$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view)/(new-password).api?(.*?)$ entity-$3-$4.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view)/(password|split).api$ entity-$3-$4.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(.*?)/(edit|view).api?(.*?)$ entity-$3.php?version=$1&mode=$2&clause=$2&state=$3&output=$3&$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api$ index.php?version=$1&mode=$2&clause=&state=&output=$3& [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?)/(.*?).api?(.*?)$ index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&name=$6&$7 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?)/(.*?).api$ index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&name=$6 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?).api?(.*?)$ index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5&$6 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?)/(.*?).api$ index.php?version=$1&mode=$2&clause=$3&state=$4&output=$5 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?).api?(.*?)$ index.php?version=$1&mode=$2&clause=$3&state=&output=$4&$5 [L,NC,QSA] 
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?)/(.*?).api$ index.php?version=$1&mode=$2&clause=$3&state=&output=$4 [L,NC,QSA] 
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api?(.*?)$ index.php?version=$1&mode=$2&clause=&state=&output=$3&$4 [L,NC,QSA]
+RewriteRule ^([a-z0-9]{2})/(vcf|csv|keywords|categories|entity|entities)/(.*?).api$ index.php?version=$1&mode=$2&clause=&state=&output=$3& [L,NC,QSA]
+RewriteRule ^callback-example.php$ examples/callback-example.php.txt [L,NC,QSA]
+RewriteRule ^(.*?).(css|txt|php|jpg|png|gif|ico)$ $1.$2 [L,NC,QSA]
