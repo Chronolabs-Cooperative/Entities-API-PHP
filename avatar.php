@@ -20,15 +20,16 @@
  */
 
 $sql = array();
-ini_set('display_errors', true);
-ini_set('log_errors', true);
+ini_set('display_errors', false);
+ini_set('log_errors', false);
 error_reporting(E_ERROR);
 define('MAXIMUM_QUERIES', 25);
 ini_set('memory_limit', '400M');
-require_once dirname(__DIR__).'/functions.php';
-require_once dirname(__DIR__).'/class/entitiesages.php';
-require_once dirname(__DIR__).'/class/WideImage/WideImage.php';
-error_reporting(E_ERROR);
+
+require_once __DIR__ . '/apiconfig.php';
+require_once __DIR__ . '/class/entitiesages.php';
+require_once __DIR__ . '/class/WideImage/WideImage.php';
+
 set_time_limit(7200);
 
 $entityids = array();
