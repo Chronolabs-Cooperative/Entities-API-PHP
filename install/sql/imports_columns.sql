@@ -1,5 +1,5 @@
 
-CREATE TABLE `imports_columns` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('imports_columns') . "` (
   `column-id` int(24) NOT NULL AUTO_INCREMENT,
   `maps-id` varchar(32) NOT NULL DEFAULT '',
   `position` int(12) NOT NULL DEFAULT '0',

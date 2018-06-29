@@ -1,5 +1,5 @@
 
-CREATE TABLE `avatars_entities` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('avatars_entities') . "` (
   `avatar-id` varchar(32) NOT NULL DEFAULT '',
   `entity-id` varchar(32) NOT NULL DEFAULT '',
   `when` int(12) NOT NULL,

@@ -104,7 +104,7 @@ foreach($emails as $entityid => $values)
 	$cc = $to = array();
 	$emails = $values;
 	
-	$mailer = new EntitiesMailer("chronolabscoop@users.sourceforge.net", "Entities Repository API");
+	$mailer = new APIMailer("chronolabscoop@users.sourceforge.net", "Entities Repository API");
 	if (file_exists($file = dirname(__DIR__) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "SMTPAuth.diz"))
 		$smtpauths = explode("\n", str_replace(array("\r\n", "\n\n", "\n\r"), "\n", file_get_contents($file)));
 	if (count($smtpauths)>=1)

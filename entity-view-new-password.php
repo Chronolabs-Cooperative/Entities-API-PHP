@@ -44,14 +44,14 @@
 		exit(0);
 	}
 	
-	$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s'",$clause);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `entity-id` LIKE '%s'",$clause);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$entity = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
 	$entityarray = getEntityArray($entity);
 		
-	require_once __DIR__ . '/class/entitiesmailer.php';
+	require_once __DIR__ . '/class/apimailer.php';
 	$fingers = $emails = array();
 	
 	if (!empty($entity['email-address-one-id']))
@@ -61,15 +61,15 @@
 	if (!empty($entity['email-address-three-id']))
 		$fingers[$entity['email-address-three-id']] = $entity['email-address-three-id'];
 
-	$sql = "SELECT * FROM `emails` WHERE `email-id` IN ('".implode("','", array_keys($fingers))."') AND `offlined` = 0";
-	if ($GLOBALS['EntitiesDB']->getRowsNum($result = $GLOBALS['EntitiesDB']->queryF($sql = sprintf($sql, time() - (3600*24*7*mt_rand(4.765, 7.876)), time() - (3600*24*7*mt_rand(4.765, 7.876)))))>=1)
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('emails') . "` WHERE `email-id` IN ('".implode("','", array_keys($fingers))."') AND `offlined` = 0";
+	if ($GLOBALS['APIDB']->getRowsNum($result = $GLOBALS['APIDB']->queryF($sql = sprintf($sql, time() - (3600*24*7*mt_rand(4.765, 7.876)), time() - (3600*24*7*mt_rand(4.765, 7.876)))))>=1)
 	{
-		while($row = $GLOBALS['EntitiesDB']->fetchArray($result))
+		while($row = $GLOBALS['APIDB']->fetchArray($result))
 		{
 			$emails[$clause][$row['email-id']] = $row;
 		}
 	} else
-		die ("SQL Failed: $sql ::: " . $GLOBALS['EntitiesDB']->error());
+		die ("SQL Failed: $sql ::: " . $GLOBALS['APIDB']->error());
 
 	foreach($emails as $entityid => $values)
 	{
@@ -77,7 +77,7 @@
 		{
 			if ($_GET['token']==md5($entityid.$emailid.$GLOBALS['peerid']))
 			{
-				$mailer = new EntitiesMailer("wishcraft@users.sourceforge.net", "Entities Repository API");
+				$mailer = new APIMailer("wishcraft@users.sourceforge.net", "Entities Repository API");
 				if (file_exists($file = dirname(__DIR__) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "SMTPAuth.diz"))
 					$smtpauths = explode("\n", str_replace(array("\r\n", "\n\n", "\n\r"), "\n", file_get_contents($file)));
 				if (count($smtpauths)>=1)
@@ -114,15 +114,15 @@
 				$html = str_replace("{X_TONAME}", $email['display-name'], $html);
 				if ($mailer->sendMail($to, array(),  array(), "New $mode password requested please utilise this email to recieve one!", $html, array(), NULL, true))
 				{
-					$sql = sprintf("UPDATE `entities` SET `%s-password` = md5('%s') WHERE `entity-id` LIKE '%s'", $state, $newpass, $entityid);
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = sprintf("UPDATE `" . $GLOBALS['APIDB']->prefix('entities') . "` SET `%s-password` = md5('%s') WHERE `entity-id` LIKE '%s'", $state, $newpass, $entityid);
+					if (!$GLOBALS['APIDB']->queryF($sql))
 						die('SQL Failed: ' . $sql);
-					$sql = "UPDATE `emails` SET `verified` = -100001 WHERE `email-id` LIKE '" . $emailid . "'";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('emails') . "` SET `verified` = -100001 WHERE `email-id` LIKE '" . $emailid . "'";
+					if (!$GLOBALS['APIDB']->queryF($sql))
 						die('SQL Failed: ' . $sql);
-					$sql = "UPDATE `emails` SET `contacted` = '" . time() . "' WHERE `email-id` = '" . $emailid . "'";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
-						die('SQL Failed: : ' . $sql . " :: " . $GLOBALS['EntitiesDB']->error());
+					$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('emails') . "` SET `contacted` = '" . time() . "' WHERE `email-id` = '" . $emailid . "'";
+					if (!$GLOBALS['APIDB']->queryF($sql))
+						die('SQL Failed: : ' . $sql . " :: " . $GLOBALS['APIDB']->error());
 					header("Location: " . API_URL . '/v2/' . $clause . '/' . $state . '.api');
 				}
 			}	

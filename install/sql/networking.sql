@@ -1,5 +1,5 @@
 
-CREATE TABLE `networking` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('networking') . "` (
   `ip-id` varchar(32) NOT NULL DEFAULT '',
   `type` enum('realm','ipv4','ipv6') NOT NULL DEFAULT 'realm',
   `realm-id` varchar(32) NOT NULL DEFAULT '',

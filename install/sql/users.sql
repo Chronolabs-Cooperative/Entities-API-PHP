@@ -1,4 +1,4 @@
-CREATE TABLE `users` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('users') . "` (
   `uid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL DEFAULT '',
   `uname` varchar(25) NOT NULL DEFAULT '',

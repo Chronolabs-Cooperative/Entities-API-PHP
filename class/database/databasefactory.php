@@ -64,9 +64,6 @@ class APIDatabaseFactory
                     $class = 'API' . ucfirst(API_DB_TYPE) . 'DatabaseProxy';
                 }
 
-                $apiPreload = APIPreload::getInstance();
-                $apiPreload->triggerEvent('core.class.database.databasefactory.connection', array(&$class));
-
                 $instance = new $class();
                 $instance->setLogger(APILogger::getInstance());
                 $instance->setPrefix(API_DB_PREFIX);

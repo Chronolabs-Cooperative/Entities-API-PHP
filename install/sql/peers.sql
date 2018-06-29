@@ -1,5 +1,5 @@
 
-CREATE TABLE `peers` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('peers') . "` (
   `peer-id` varchar(32) NOT NULL,
   `api-url` varchar(200) NOT NULL,
   `api-short-url` varchar(200) NOT NULL,

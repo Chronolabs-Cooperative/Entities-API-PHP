@@ -1,5 +1,5 @@
 
-CREATE TABLE `categories_codes` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` (
   `category-code-id` int(24) NOT NULL AUTO_INCREMENT,
   `category-id` varchar(32) NOT NULL DEFAULT '',
   `maps-id` varchar(32) NOT NULL DEFAULT '',

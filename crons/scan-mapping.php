@@ -126,7 +126,7 @@ foreach($files as $typal => $filesets)
 										$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('imports') . "` SET `maps-id` = '".$mapid."', `columns` = '$rc' WHERE `import-id` LIKE '". $import['import-id'] . "'";
 										if (!$GLOBALS['APIDB']->queryF($sql))
 											die('SQL Failed: ' . $sql);
-										$mailer = new EntitiesMailer("chronolabscoop@users.sourceforge.net", "Entities Repository API");
+										$mailer = new APIMailer("chronolabscoop@users.sourceforge.net", "Entities Repository API");
 										if (file_exists($file = dirname(__DIR__) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . "SMTPAuth.diz"))
 											$smtpauths = explode("\n", str_replace(array("\r\n", "\n\n", "\n\r"), "\n", file_get_contents($file)));
 										if (count($smtpauths)>=1)

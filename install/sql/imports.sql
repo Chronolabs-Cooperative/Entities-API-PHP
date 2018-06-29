@@ -1,5 +1,5 @@
 
-CREATE TABLE `imports` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('imports') . "` (
   `import-id` varchar(32) NOT NULL DEFAULT '',
   `peer-id` varchar(32) NOT NULL DEFAULT '',
   `uploader-email-id` varchar(32) NOT NULL DEFAULT '',

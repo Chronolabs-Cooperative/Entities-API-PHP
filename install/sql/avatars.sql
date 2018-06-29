@@ -1,5 +1,5 @@
 
-CREATE TABLE `avatars` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('avatars') . "` (
   `avatar-id` varchar(32) NOT NULL DEFAULT '',
   `source` enum('gravatar','upload','unknown') NOT NULL DEFAULT 'unknown',
   `instances` int(18) NOT NULL DEFAULT '0',

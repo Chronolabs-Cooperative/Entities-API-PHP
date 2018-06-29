@@ -55,32 +55,32 @@
 		{
 			case "mapping":
 				$category = false;
-				$sql = sprintf("SELECT * FROM `imports` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
-				if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
+				if (!$results = $GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
-				if (!$import = $GLOBALS['EntitiesDB']->fetchArray($results))
+				if (!$import = $GLOBALS['APIDB']->fetchArray($results))
 					die('Recordset Failed: ' . $sql);
-				$sql = "SELECT * FROM `imports_maps` WHERE `maps-id` LIKE '".$import['maps-id']."'";
-				if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` WHERE `maps-id` LIKE '".$import['maps-id']."'";
+				if (!$results = $GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
-				if (!$maps = $GLOBALS['EntitiesDB']->fetchArray($results))
+				if (!$maps = $GLOBALS['APIDB']->fetchArray($results))
 					die('Recordset Failed: ' . $sql);
 					$columns = array();
-				$sql = "SELECT * FROM `imports_columns` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
-				if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_columns') . "` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
+				if (!$results = $GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
-				while ($column = $GLOBALS['EntitiesDB']->fetchArray($results))
+				while ($column = $GLOBALS['APIDB']->fetchArray($results))
 				{
-					$sql = "UPDATE `imports_columns` SET `field` = '" . $_POST['field'][$column['column-id']] . "', `type` = '" . $_POST['type'][$column['column-id']] . "' WHERE `column-id` = '" . $column['column-id'] . "'";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('imports_columns') . "` SET `field` = '" . $_POST['field'][$column['column-id']] . "', `type` = '" . $_POST['type'][$column['column-id']] . "' WHERE `column-id` = '" . $column['column-id'] . "'";
+					if (!$GLOBALS['APIDB']->queryF($sql))
 						die('SQL Failed: ' . $sql);
 					if ($_POST['field'][$column['column-id']] == "Category")
 						$category = true;
 
-					$sql = "SELECT * FROM `peers` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
-					if ($GLOBALS['EntitiesDB']->getRowsNum($results = $GLOBALS['EntitiesDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
+					$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('peers') . "` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
+					if ($GLOBALS['APIDB']->getRowsNum($results = $GLOBALS['APIDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
 					{
-						while($other = $GLOBALS['EntitiesDB']->fetchArray($results))
+						while($other = $GLOBALS['APIDB']->fetchArray($results))
 						{
 							@getURIData(sprintf($other['callback'], 'mapping-columns-update'), 145, 145, array('peer-id'=>$GLOBALS['peerid'], 'field'=> $_POST['field'][$column['column-id']], 'type' => $_POST['type'][$column['column-id']], 'column-id' => $column['column-id']));
 						}
@@ -88,30 +88,30 @@
 				}
 				if ($category==false)
 				{
-					$sql = "SELECT * FROM `peers` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
-					if ($GLOBALS['EntitiesDB']->getRowsNum($results = $GLOBALS['EntitiesDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
+					$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('peers') . "` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
+					if ($GLOBALS['APIDB']->getRowsNum($results = $GLOBALS['APIDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
 					{
-						while($other = $GLOBALS['EntitiesDB']->fetchArray($results))
+						while($other = $GLOBALS['APIDB']->fetchArray($results))
 						{
 							@getURIData(sprintf($other['callback'], 'mapping-maps-update'), 145, 145, array('peer-id'=>$GLOBALS['peerid'], 'title'=> mysql_escape_string($_POST['title']), 'state' => 'Defined', 'maps-id' => $maps['maps-id']));
 						}
 					}
 						
-					$sql = "UPDATE `imports_maps` SET `title` = '" . mysql_escape_string($_POST['title']) . "', `state` = 'Defined' WHERE `maps-id` = '" . $maps['maps-id'] . "'";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` SET `title` = '" . mysql_escape_string($_POST['title']) . "', `state` = 'Defined' WHERE `maps-id` = '" . $maps['maps-id'] . "'";
+					if (!$GLOBALS['APIDB']->queryF($sql))
 						die('SQL Failed: ' . $sql);
 				} else {
-					$sql = "SELECT * FROM `peers` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
-					if ($GLOBALS['EntitiesDB']->getRowsNum($results = $GLOBALS['EntitiesDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
+					$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('peers') . "` WHERE `peer-id` NOT LIKE '%s' AND `polinating` = 'Yes'";
+					if ($GLOBALS['APIDB']->getRowsNum($results = $GLOBALS['APIDB']->queryF(sprintf($sql, mysql_escape_string($GLOBALS['peerid']))))>=1)
 					{
-						while($other = $GLOBALS['EntitiesDB']->fetchArray($results))
+						while($other = $GLOBALS['APIDB']->fetchArray($results))
 						{
 							@getURIData(sprintf($other['callback'], 'mapping-maps-update'), 145, 145, array('peer-id'=>$GLOBALS['peerid'], 'title'=> mysql_escape_string($_POST['title']), 'state' => 'Waiting', 'maps-id' => $maps['maps-id']));
 						}
 					}
 						
-					$sql = "UPDATE `imports_maps` SET `title` = '" . mysql_escape_string($_POST['title']) . "', `state` = 'Waiting' WHERE `maps-id` = '" . $maps['maps-id'] . "'";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` SET `title` = '" . mysql_escape_string($_POST['title']) . "', `state` = 'Waiting' WHERE `maps-id` = '" . $maps['maps-id'] . "'";
+					if (!$GLOBALS['APIDB']->queryF($sql))
 						die('SQL Failed: ' . $sql);
 					header("Location: " . API_URL . '/v2/categories/'.$clause."/html.api");
 					exit;

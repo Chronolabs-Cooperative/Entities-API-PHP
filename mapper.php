@@ -24,21 +24,21 @@
  * @link            https://twitter.com/ChronolabsCoop
  */
 
-	$sql = sprintf("SELECT * FROM `imports` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$import = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$import = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
-	$sql = "SELECT * FROM `imports_maps` WHERE `maps-id` LIKE '".$import['maps-id']."'";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` WHERE `maps-id` LIKE '".$import['maps-id']."'";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$maps = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$maps = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
 	$columns = array();
-	$sql = "SELECT * FROM `imports_columns` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_columns') . "` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($column = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($column = $GLOBALS['APIDB']->fetchArray($results))
 		$columns[$column['column-id']] = $column;
 	if (!count($columns))
 		die('Recordset Failed: ' . $sql);

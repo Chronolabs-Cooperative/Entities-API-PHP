@@ -1,5 +1,5 @@
 
-CREATE TABLE `entities` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('entities') . "` (
   `entity-id` varchar(32) NOT NULL DEFAULT '',
   `peer-id` varchar(32) NOT NULL DEFAULT '',
   `import-id` varchar(32) NOT NULL DEFAULT '',

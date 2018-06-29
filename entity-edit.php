@@ -49,14 +49,14 @@
 	}
 	
 
-	$sql = sprintf("SELECT * FROM `entities` WHERE md5(concat(`entity-id`, `edit-password`)) LIKE '%s' AND `edit-protected` = 'Yes'", $clause);
-	if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-		if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE md5(concat(`entity-id`, `edit-password`)) LIKE '%s' AND `edit-protected` = 'Yes'", $clause);
+	if ($results = $GLOBALS['APIDB']->queryF($sql))
+		if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 			$clause = $entity['entity-id'];
 	else {
-		$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s' AND `edit-protected` = 'Yes'", $clause);
-		if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-			if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+		$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `entity-id` LIKE '%s' AND `edit-protected` = 'Yes'", $clause);
+		if ($results = $GLOBALS['APIDB']->queryF($sql))
+			if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 			{
 				if (function_exists('http_response_code'))
 					http_response_code(400);
@@ -78,9 +78,9 @@
 					if ($_POST['request'] == 'Yes') {
 						setNewPassword($clause, 'edit');
 					}
-					$sql = sprintf("SELECT md5(concat(`entity-id`, `edit-password`, '%s', '%s')) as `clause` FROM `entities` WHERE `view-password` = md5('%s') AND `entity-id` LIKE '%s' AND `edit-protected` = 'Yes'", $GLOBALS['peerid'], date("Y-M-W"), $_POST['password'], $clause);
-					if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-						if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+					$sql = sprintf("SELECT md5(concat(`entity-id`, `edit-password`, '%s', '%s')) as `clause` FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `view-password` = md5('%s') AND `entity-id` LIKE '%s' AND `edit-protected` = 'Yes'", $GLOBALS['peerid'], date("Y-M-W"), $_POST['password'], $clause);
+					if ($results = $GLOBALS['APIDB']->queryF($sql))
+						if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 						{
 							if (function_exists('http_response_code'))
 								http_response_code(301);
@@ -96,27 +96,27 @@
 				}
 				
 			case "entity":
-				$sql = sprintf("SELECT * FROM `imports` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
-				if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
+				if (!$results = $GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
-				if (!$import = $GLOBALS['EntitiesDB']->fetchArray($results))
+				if (!$import = $GLOBALS['APIDB']->fetchArray($results))
 					die('Recordset Failed: ' . $sql);
 				
 				$categories = array();
-				$sql = "SELECT * FROM `categories_codes` WHERE `maps-id` LIKE '".$import['maps-id']."' AND `code` IN ('" . implode("', '", array_keys($_POST['category'])) . "') ORDER BY `code` ASC";
-				if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` WHERE `maps-id` LIKE '".$import['maps-id']."' AND `code` IN ('" . implode("', '", array_keys($_POST['category'])) . "') ORDER BY `code` ASC";
+				if (!$results = $GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
-				while ($category = $GLOBALS['EntitiesDB']->fetchArray($results))
+				while ($category = $GLOBALS['APIDB']->fetchArray($results))
 				{
 					if ($_POST['category'][$category['code']]=='--user--')
 					{
 						$create = false;
-						$sql = "SELECT * FROM `categories` where `category` LIKE '" . ($catstr = ucwords($_POST['user'][$category['code']])) . "'";
-						if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-							if ($cat = $GLOBALS['EntitiesDB']->fetchArray($results))
+						$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories') . "` where `category` LIKE '" . ($catstr = ucwords($_POST['user'][$category['code']])) . "'";
+						if ($results = $GLOBALS['APIDB']->queryF($sql))
+							if ($cat = $GLOBALS['APIDB']->fetchArray($results))
 							{
-								$sql = "UPDATE `categories_codes` SET `category-id` = '".$cat['category-id'] . "' WHERE `category-code-id` = '" . $cat['category-code-id'] . "'";
-								if (!$GLOBALS['EntitiesDB']->queryF($sql))
+								$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` SET `category-id` = '".$cat['category-id'] . "' WHERE `category-code-id` = '" . $cat['category-code-id'] . "'";
+								if (!$GLOBALS['APIDB']->queryF($sql))
 									die('SQL Failed: ' . $sql);
 							} else {
 								$create = true;
@@ -127,17 +127,17 @@
 						if ($create==true)
 						{
 							$categoryid = md5(microtime(true).$catstr);
-							$sql = "INSERT INTO `categories` (`category-id`, `category`) VALUES('$categoryid', '".mysql_escape_string($catstr)."')";
-							if (!$GLOBALS['EntitiesDB']->queryF($sql))
+							$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('categories') . "` (`category-id`, `category`) VALUES('$categoryid', '".mysql_escape_string($catstr)."')";
+							if (!$GLOBALS['APIDB']->queryF($sql))
 								die('SQL Failed: ' . $sql);
-							$sql = "INSERT INTO `categories_codes` (`category-id`, `maps-id`, `code`) VALUES('$categoryid', '".$import['maps-id']."','".mysql_escape_string($category['code'])."')";
-							if (!$GLOBALS['EntitiesDB']->queryF($sql))
+							$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` (`category-id`, `maps-id`, `code`) VALUES('$categoryid', '".$import['maps-id']."','".mysql_escape_string($category['code'])."')";
+							if (!$GLOBALS['APIDB']->queryF($sql))
 								die('SQL Failed: ' . $sql);
 									
 						}
 					} else {
-						$sql = "UPDATE `categories_codes` SET `category-id` = '" . $_POST['category'][$category['code']] . "' WHERE `category-id` = '" . $category['category-id'] . "'";
-						if (!$GLOBALS['EntitiesDB']->queryF($sql))
+						$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` SET `category-id` = '" . $_POST['category'][$category['code']] . "' WHERE `category-id` = '" . $category['category-id'] . "'";
+						if (!$GLOBALS['APIDB']->queryF($sql))
 							die('SQL Failed: ' . $sql);
 					}
 					unset($_POST['category'][$category['code']]);
@@ -150,12 +150,12 @@
 						if ($_POST['category'][$code]=='--user--')
 						{
 							$create = false;
-							$sql = "SELECT * FROM `categories` where `category` LIKE '" . $catstr = ucwords($_POST['user'][$category['code']]) . "'";
-							if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-								if ($cat = $GLOBALS['EntitiesDB']->fetchArray($results))
+							$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories') . "` where `category` LIKE '" . $catstr = ucwords($_POST['user'][$category['code']]) . "'";
+							if ($results = $GLOBALS['APIDB']->queryF($sql))
+								if ($cat = $GLOBALS['APIDB']->fetchArray($results))
 								{
-									$sql = "UPDATE `categories_codes` SET `category-id` = '".$cat['category-id'] . "' WHERE `category-code-id` = '" . $cat['category-code-id'] . "'";
-									if (!$GLOBALS['EntitiesDB']->queryF($sql))
+									$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` SET `category-id` = '".$cat['category-id'] . "' WHERE `category-code-id` = '" . $cat['category-code-id'] . "'";
+									if (!$GLOBALS['APIDB']->queryF($sql))
 										die('SQL Failed: ' . $sql);
 								} else {
 									$create = true;
@@ -166,23 +166,23 @@
 									if ($create==true)
 									{
 										$categoryid = md5(microtime(true).$catstr);
-										$sql = "INSERT INTO `categories` (`category-id`, `category`) VALUES('$categoryid', '".mysql_escape_string($catstr)."')";
-										if (!$GLOBALS['EntitiesDB']->queryF($sql))
+										$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('categories') . "` (`category-id`, `category`) VALUES('$categoryid', '".mysql_escape_string($catstr)."')";
+										if (!$GLOBALS['APIDB']->queryF($sql))
 											die('SQL Failed: ' . $sql);
-										$sql = "INSERT INTO `categories_codes` (`category-id`, `maps-id`, `code`) VALUES('$categoryid', '".$import['maps-id']."','".mysql_escape_string($code)."')";
-										if (!$GLOBALS['EntitiesDB']->queryF($sql))
+										$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` (`category-id`, `maps-id`, `code`) VALUES('$categoryid', '".$import['maps-id']."','".mysql_escape_string($code)."')";
+										if (!$GLOBALS['APIDB']->queryF($sql))
 											die('SQL Failed: ' . $sql);
 													
 									}
 						} else {
-							$sql = "INSERT INTO `categories_codes` (`category-id`, `maps-id`, `code`) VALUES('".$_POST['category'][$code]."', '".$import['maps-id']."','".mysql_escape_string($code)."')";
-							if (!$GLOBALS['EntitiesDB']->queryF($sql))
+							$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` (`category-id`, `maps-id`, `code`) VALUES('".$_POST['category'][$code]."', '".$import['maps-id']."','".mysql_escape_string($code)."')";
+							if (!$GLOBALS['APIDB']->queryF($sql))
 								die('SQL Failed: ' . $sql);
 						}	
 					}
 				}
-				$sql = "UPDATE `imports_maps` SET `state` = 'Defined' WHERE `maps-id` = '" . $import['maps-id'] . "'";
-				if (!$GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = "UPDATE `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` SET `state` = 'Defined' WHERE `maps-id` = '" . $import['maps-id'] . "'";
+				if (!$GLOBALS['APIDB']->queryF($sql))
 					die('SQL Failed: ' . $sql);
 				header("Location: " . API_URL);
 				exit(0);
@@ -191,14 +191,14 @@
 	}
 	
 
-	$sql = sprintf("SELECT * FROM `entities` WHERE md5(concat(`entity-id`, `edit-password`, '%s', '%s')) LIKE '%s' AND `edit-protected` = 'Yes'", $GLOBALS['peerid'], date("Y-M-W"), $clause);
-	if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-		if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE md5(concat(`entity-id`, `edit-password`, '%s', '%s')) LIKE '%s' AND `edit-protected` = 'Yes'", $GLOBALS['peerid'], date("Y-M-W"), $clause);
+	if ($results = $GLOBALS['APIDB']->queryF($sql))
+		if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 			$clause = $entity['entity-id'];
 		else {
-			$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s' AND `view-protected` = 'Yes'", $clause);
-			if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-				if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+			$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `entity-id` LIKE '%s' AND `view-protected` = 'Yes'", $clause);
+			if ($results = $GLOBALS['APIDB']->queryF($sql))
+				if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 				{
 					if (function_exists('http_response_code'))
 						http_response_code(400);
@@ -207,9 +207,9 @@
 				}
 		}
 				
-	$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s'", $clause);
-	if ($results = $GLOBALS['EntitiesDB']->queryF($sql))
-		if ($entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `entity-id` LIKE '%s'", $clause);
+	if ($results = $GLOBALS['APIDB']->queryF($sql))
+		if ($entity = $GLOBALS['APIDB']->fetchArray($results))
 		{
 			if (function_exists('http_response_code'))
 				http_response_code(400);

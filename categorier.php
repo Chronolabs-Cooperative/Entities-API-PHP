@@ -24,31 +24,31 @@
  * @link            https://twitter.com/ChronolabsCoop
  */
 
-	$sql = sprintf("SELECT * FROM `imports` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE md5(concat(`maps-id`, `import-id`)) LIKE '%s'",$clause);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$import = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$import = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
-	$sql = sprintf("SELECT * FROM `imports` WHERE `records` = 0 AND `maps-id` LIKE '%s'",$import['maps-id']);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE `records` = 0 AND `maps-id` LIKE '%s'",$import['maps-id']);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
 	$imports = array();
-	while ($imp = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($imp = $GLOBALS['APIDB']->fetchArray($results))
 		$imports[$column['import-id']] = $imp;
 	if (!count($imports))
 		die('Recordset Failed: ' . $sql);
 	$columns = array();
-	$sql = "SELECT * FROM `imports_columns` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_columns') . "` WHERE `maps-id` LIKE '".$import['maps-id']."' ORDER BY `position` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($column = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($column = $GLOBALS['APIDB']->fetchArray($results))
 		$columns[$column['field']] = $column['title'];
 	if (!count($columns))
 		die('Recordset Failed: ' . $sql);
-	$sql = "SELECT * FROM `imports_maps` WHERE `maps-id` LIKE '".$import['maps-id']."'";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports_maps') . "` WHERE `maps-id` LIKE '".$import['maps-id']."'";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$maps = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$maps = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
 	$csv = array();
 	foreach($imports as $importid => $imp)
@@ -66,22 +66,22 @@
 		}
 	sort($codes);
 	$categories = array();
-	$sql = "SELECT * FROM `categories_codes` WHERE `maps-id` LIKE '".$import['maps-id']."' AND `code` IN ('" . implode("', '", $codes) . "') ORDER BY `code` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` WHERE `maps-id` LIKE '".$import['maps-id']."' AND `code` IN ('" . implode("', '", $codes) . "') ORDER BY `code` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($category = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($category = $GLOBALS['APIDB']->fetchArray($results))
 		$categories[$category['code']] = $category;
 	$allcodes = array();
-	$sql = "SELECT * FROM `categories_codes` WHERE `code` IN ('" . implode("', '", $codes) . "') ORDER BY `code` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories_codes') . "` WHERE `code` IN ('" . implode("', '", $codes) . "') ORDER BY `code` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($category = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($category = $GLOBALS['APIDB']->fetchArray($results))
 		$allcodes[$category['code']][$category['category-id']] = $category;
 	$allcats = array();
-	$sql = "SELECT * FROM `categories` ORDER BY `category` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories') . "` ORDER BY `category` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($category = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($category = $GLOBALS['APIDB']->fetchArray($results))
 		$allcats[$category['category-id']] = $category;
 	foreach($codes as $id => $code)
 		if (empty($code))

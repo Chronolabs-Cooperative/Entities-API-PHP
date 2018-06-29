@@ -1,6 +1,6 @@
 <?php
 /**
- * Chronolabs Cooperative Entitisms Repository Services REST API
+ * Chronolabs Entitiesing Repository Services REST API API
  *
  * You may not change or alter any portion of this comment or credits
  * of supporting developers from this source code or any supporting source code
@@ -12,7 +12,7 @@
  * @copyright       Chronolabs Cooperative http://syd.au.snails.email
  * @license         ACADEMIC APL 2 (https://sourceforge.net/u/chronolabscoop/wiki/Academic%20Public%20License%2C%20version%202.0/)
  * @license         GNU GPL 3 (http://www.gnu.org/licenses/gpl.html)
- * @package         entities-api
+ * @package         emails-api
  * @since           2.2.1
  * @author          Dr. Simon Antony Roberts <simon@snails.email>
  * @version         2.2.8

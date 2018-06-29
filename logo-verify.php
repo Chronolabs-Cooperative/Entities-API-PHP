@@ -30,11 +30,11 @@
 	$hash = !isset($_REQUEST['hash'])?md5(NULL):$_REQUEST['hash'];
 	foreach(explode("--", $hash) as $emailid)
 	{
-		$sql = sprintf("UPDATE `emails` SET `verified` = '%s' WHERE `email-id` LIKE '%s'",time(), $emailid);
-		if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+		$sql = sprintf("UPDATE `" . $GLOBALS['APIDB']->prefix('emails') . "` SET `verified` = '%s' WHERE `email-id` LIKE '%s'",time(), $emailid);
+		if (!$results = $GLOBALS['APIDB']->queryF($sql))
 			die('SQL Failed: ' . $sql);
-		$sql = sprintf("INSERT INTO `emails_networking` (`email-id`, `ip-id`, `when`) VALUES ('%s', '%s', '%s')", $emailid, $GLOBALS['ipid'], time());
-		if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+		$sql = sprintf("INSERT INTO `" . $GLOBALS['APIDB']->prefix('emails_networking') . "` (`email-id`, `ip-id`, `when`) VALUES ('%s', '%s', '%s')", $emailid, $GLOBALS['ipid'], time());
+		if (!$results = $GLOBALS['APIDB']->queryF($sql))
 			die('SQL Failed: ' . $sql);
 	}
 	header("Context-Type: image/png");

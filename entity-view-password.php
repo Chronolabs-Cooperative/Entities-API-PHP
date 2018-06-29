@@ -24,25 +24,25 @@
  * @link            https://twitter.com/ChronolabsCoop
  */
 
-	$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s'",$clause);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('entities') . "` WHERE `entity-id` LIKE '%s'",$clause);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$entity = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$entity = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
 	$entityarray = getEntityArray($entity);
-	$sql = sprintf("SELECT * FROM `imports` WHERE `import-id` LIKE '%s'", $entity['import-id']);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE `import-id` LIKE '%s'", $entity['import-id']);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	if (!$import = $GLOBALS['EntitiesDB']->fetchArray($results))
+	if (!$import = $GLOBALS['APIDB']->fetchArray($results))
 		die('Recordset Failed: ' . $sql);
-	$sql = sprintf("SELECT * FROM `imports` WHERE `records` = 0 AND `maps-id` LIKE '%s'",$import['maps-id']);
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = sprintf("SELECT * FROM `" . $GLOBALS['APIDB']->prefix('imports') . "` WHERE `records` = 0 AND `maps-id` LIKE '%s'",$import['maps-id']);
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
 	$categories = array();
-	$sql = "SELECT * FROM `categories` ORDER BY `category` ASC";
-	if (!$results = $GLOBALS['EntitiesDB']->queryF($sql))
+	$sql = "SELECT * FROM `" . $GLOBALS['APIDB']->prefix('categories') . "` ORDER BY `category` ASC";
+	if (!$results = $GLOBALS['APIDB']->queryF($sql))
 		die('SQL Failed: ' . $sql);
-	while ($category = $GLOBALS['EntitiesDB']->fetchArray($results))
+	while ($category = $GLOBALS['APIDB']->fetchArray($results))
 		$categories[$category['category-id']] = $category['category'];
 	$countries = json_decode(getURIData('http://places.labs.coop/v1/list/list/json.api', 120, 120), true);
 ?>

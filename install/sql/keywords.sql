@@ -1,8 +1,8 @@
 
-CREATE TABLE `keywords` (
+CREATE TABLE `" . $GLOBALS['APIDB']->prefix('keywords') . "` (
   `keyword-id` varchar(32) NOT NULL DEFAULT '',
   `keyword` varchar(100) NOT NULL DEFAULT '',
-  `entities` int(12) NOT NULL DEFAULT '0',
+  `" . $GLOBALS['APIDB']->prefix('entities') . "` int(12) NOT NULL DEFAULT '0',
   `duplicates` int(12) NOT NULL DEFAULT '0',
   `verified` int(12) NOT NULL DEFAULT '0',
   `created` int(12) NOT NULL DEFAULT '0',

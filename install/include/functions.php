@@ -26,27 +26,7 @@
 function install_acceptUser($hash = '')
 {
     $GLOBALS['apiUser'] = null;
-    $assertClaims = array(
-        'sub' => 'apiinstall',
-    );
-    if (false === $claims || empty($claims->uname)) {
-        return false;
-    }
-    $uname = $claims->uname;
-    /* @var $memberHandler APIMemberHandler */
-    $memberHandler = api_getHandler('member');
-    $user = array_pop($memberHandler->getUsers(new Criteria('uname', $uname)));
-
-    if (is_object($GLOBALS['api']) && method_exists($GLOBALS['api'], 'acceptUser')) {
-        $res = $GLOBALS['api']->acceptUser($uname, true, '');
-
-        return $res;
-    }
-
-    $GLOBALS['apiUser']        = $user;
-    $_SESSION['apiUserId']     = $GLOBALS['apiUser']->getVar('uid');
-    $_SESSION['apiUserGroups'] = $GLOBALS['apiUser']->getGroups();
-
+    
     return true;
 }
 

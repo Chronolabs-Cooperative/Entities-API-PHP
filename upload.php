@@ -150,7 +150,7 @@
 		redirect(isset($_REQUEST['return'])&&!empty($_REQUEST['return'])?$_REQUEST['return']:'http://'. $_SERVER["HTTP_HOST"], 9, "<center><h1 style='color:rgb(198,0,0);'>Error Has Occured</h1><br/><p>" . implode("<br />", $error) . "</p></center>");
 		exit(0);
 	}
-	$GLOBALS["EntitiesDB"]->queryF('UPDATE `networking` SET `uploads` = `uploads` + 1 WHERE `ip-id` = "'.$ipid.'"');
+	$GLOBALS["APIDB"]->queryF("UPDATE `" . $GLOBALS['APIDB']->prefix('networking') . "` SET `uploads` = `uploads` + 1 WHERE `ip-id` = '".$ipid."'");
 	$files = getCompleteCsvListAsArray(constant("ENTITIES_RESOURCES_UNPACKING") . $uploadpath);
 	$culled = array();
 	
@@ -173,24 +173,24 @@
 			foreach($entitiesfilez as $entitiesfile)
 			{
 				$uploademailid = '';
-				$sql = "SELECT `email-id` FROM `emails` WHERE `type` = 'Uploader' AND `email` LIKE '".mysql_escape_string($_REQUEST['email']) . "'  AND `display-name` LIKE '".mysql_escape_string($_REQUEST['name']) . "'";
-				if ($result = $GLOBALS['EntitiesDB']->queryF($sql))
+				$sql = "SELECT `email-id` FROM `" . $GLOBALS['APIDB']->prefix('emails') . "` WHERE `type` = 'Uploader' AND `email` LIKE '".mysql_escape_string($_REQUEST['email']) . "'  AND `display-name` LIKE '".mysql_escape_string($_REQUEST['name']) . "'";
+				if ($result = $GLOBALS['APIDB']->queryF($sql))
 				{
-					list($uploademailid) = $GLOBALS['EntitiesDB']->fetchRow($result);
+					list($uploademailid) = $GLOBALS['APIDB']->fetchRow($result);
 				} 
 				if (empty($uploademailid)) {
 					$uploademailid = md5(microtime(true).$_REQUEST['email'].$_REQUEST['name']);
-					$sql = "INSERT INTO `emails` (`email-id`, `type`, `email`, `display-name`) VALUES ('$uploademailid', 'Uploader', '".mysql_escape_string($_REQUEST['email']) . "', '".mysql_escape_string($_REQUEST['name']) . "')";
-					if (!$GLOBALS['EntitiesDB']->queryF($sql))
+					$sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('emails') . "` (`email-id`, `type`, `email`, `display-name`) VALUES ('$uploademailid', 'Uploader', '".mysql_escape_string($_REQUEST['email']) . "', '".mysql_escape_string($_REQUEST['name']) . "')";
+					if (!$GLOBALS['APIDB']->queryF($sql))
 							die('SQL Failed: ' . $sql);;
 				}
 				if (!file_exists($copypath . DIRECTORY_SEPARATOR . sha1_file($entitiesfile) . '.csv')&&filesize($entitiesfile)>199)
 				{
 					if (copy($entitiesfile, $csvfile = $copypath . DIRECTORY_SEPARATOR .  sha1_file($entitiesfile) . '.csv'))
 					{
-						$importid = md5($sql = "INSERT INTO `imports` (`import-id`, `peer-id`, `uploader-email-id`, `country-ids`, `ip-id`, `referee`, `subject`, `filename`, `path`, `bytes`, `uploaded`, `fields-seperated`, `fields-strings`, `fields-escapes`, `fields-eol`, `callback`) VALUES ('%s', '".$GLOBALS['peerid']."', '$uploademailid', '".mysql_escape_string(json_encode($_REQUEST['country']))."', '$ipid','" . sha1_file($csvfile) . "','" . mysql_escape_string(basename($entitiesfile)) . "','" . mysql_escape_string(basename($csvfile)) . "','" . mysql_escape_string(dirname($csvfile)) . "','" . mysql_escape_string(filesize($csvfile)) . "','" . mysql_escape_string(time()) . "','" . mysql_escape_string($_REQUEST['seperated']). "','" . mysql_escape_string($_REQUEST['strings']) . "','" . mysql_escape_string($_REQUEST['escapes']) . "','" . mysql_escape_string($_REQUEST['eol']) . "','" . mysql_escape_string($_REQUEST['callback']) . "')");
+						$importid = md5($sql = "INSERT INTO `" . $GLOBALS['APIDB']->prefix('imports') . "` (`import-id`, `peer-id`, `uploader-email-id`, `country-ids`, `ip-id`, `referee`, `subject`, `filename`, `path`, `bytes`, `uploaded`, `fields-seperated`, `fields-strings`, `fields-escapes`, `fields-eol`, `callback`) VALUES ('%s', '".$GLOBALS['peerid']."', '$uploademailid', '".mysql_escape_string(json_encode($_REQUEST['country']))."', '$ipid','" . sha1_file($csvfile) . "','" . mysql_escape_string(basename($entitiesfile)) . "','" . mysql_escape_string(basename($csvfile)) . "','" . mysql_escape_string(dirname($csvfile)) . "','" . mysql_escape_string(filesize($csvfile)) . "','" . mysql_escape_string(time()) . "','" . mysql_escape_string($_REQUEST['seperated']). "','" . mysql_escape_string($_REQUEST['strings']) . "','" . mysql_escape_string($_REQUEST['escapes']) . "','" . mysql_escape_string($_REQUEST['eol']) . "','" . mysql_escape_string($_REQUEST['callback']) . "')");
 						$filez[basename($entitiesfile)] = basename($entitiesfile);
-						if ($GLOBALS['EntitiesDB']->queryF($sql = sprintf($sql, $importid)))
+						if ($GLOBALS['APIDB']->queryF($sql = sprintf($sql, $importid)))
 						{
 							if (isset($_REQUEST['callback']) && !empty($_REQUEST['callback']))
 								@getURIData($_REQUEST['callback'], 45, 45, array('action'=>'uploaded', 'filename' => basename($entitiesfile), 'file-md5' => md5($csvfile), 'import-id' => $importid, 'email-id' => $uploademailid, 'email' => $_REQUEST['email'], 'name' => $_REQUEST['name'], 'peer-id'=>$GLOBALS['peerid']));

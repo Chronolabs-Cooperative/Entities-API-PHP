@@ -42,7 +42,7 @@ defined('NWLINE') or define('NWLINE', "\n");
  * Include APILoad
  */
 require_once API_ROOT_PATH . DS . 'class' . DS . 'apiload.php';
-require_once API_ROOT_PATH . DS . 'class' . DS . 'preload.php';
+require_once API_ROOT_PATH . DS . 'class' . DS . 'textsanitizer.php';
 
 /**
  * Create Instance of apiSecurity Object and check Supergolbals
@@ -64,7 +64,6 @@ $apiLogger->startTime('XOOPS Boot');
  * Include Required Files
  */
 include_once API_ROOT_PATH . DS . 'class' . DS . 'criteria.php';
-include_once API_ROOT_PATH . DS . 'class' . DS . 'module.textsanitizer.php';
 include_once API_ROOT_PATH . DS . 'include' . DS . 'functions.php';
 /**
  * Get database for making it global
