@@ -1,6 +1,6 @@
 <?php
 /**
- * Chronolabs Entitiesing Repository Services REST API API
+ * Chronolabs Cooperative Entitisms Repository Services REST API
  *
  * You may not change or alter any portion of this comment or credits
  * of supporting developers from this source code or any supporting source code
@@ -9,15 +9,19 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @copyright       Chronolabs Cooperative http://labs.coop
- * @license         General Public License version 3 (http://labs.coop/briefs/legal/general-public-licence/13,3.html)
- * @package         entities
- * @since           2.1.9
- * @author          Simon Roberts <wishcraft@users.sourceforge.net>
- * @subpackage		api
- * @description		Entitiesing Repository Services REST API
- * @link			http://sourceforge.net/projects/chronolabsapis
- * @link			http://cipher.labs.coop
+ * @copyright       Chronolabs Cooperative http://syd.au.snails.email
+ * @license         ACADEMIC APL 2 (https://sourceforge.net/u/chronolabscoop/wiki/Academic%20Public%20License%2C%20version%202.0/)
+ * @license         GNU GPL 3 (http://www.gnu.org/licenses/gpl.html)
+ * @package         entities-api
+ * @since           2.2.1
+ * @author          Dr. Simon Antony Roberts <simon@snails.email>
+ * @version         2.2.8
+ * @description		A REST API for the storage and management of entities + persons + beingness collaterated!
+ * @link            http://internetfounder.wordpress.com
+ * @link            https://github.com/Chronolabs-Cooperative/Emails-API-PHP
+ * @link            https://sourceforge.net/p/chronolabs-cooperative
+ * @link            https://facebook.com/ChronolabsCoop
+ * @link            https://twitter.com/ChronolabsCoop
  */
 
 	$sql = sprintf("SELECT * FROM `entities` WHERE `entity-id` LIKE '%s'",$clause);

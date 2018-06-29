@@ -1,29 +1,28 @@
 <?php
-/*
- You may not change or alter any portion of this comment or credits
- of supporting developers from this source code or any supporting source code
- which is considered copyrighted (c) material of the original comment or credit authors.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*/
 /**
- * Installer path configuration page
+ * Chronolabs Cooperative Entitisms Repository Services REST API
  *
- * See the enclosed file license.txt for licensing information.
- * If you did not receive this file, get it at http://www.gnu.org/licenses/gpl-2.0.html
+ * You may not change or alter any portion of this comment or credits
+ * of supporting developers from this source code or any supporting source code
+ * which is considered copyrighted (c) material of the original comment or credit authors.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @copyright    (c) 2000-2016 API Project (www.api.org)
- * @license          GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @package          installer
- * @since            2.3.0
- * @author           Haruki Setoyama  <haruki@planewave.org>
- * @author           Kazumi Ono <webmaster@myweb.ne.jp>
- * @author           Skalpa Keo <skalpa@api.org>
- * @author           Taiwen Jiang <phppp@users.sourceforge.net>
- * @author           DuGris (aka L. JEN) <dugris@frapi.org>
- **/
+ * @copyright       Chronolabs Cooperative http://syd.au.snails.email
+ * @license         ACADEMIC APL 2 (https://sourceforge.net/u/chronolabscoop/wiki/Academic%20Public%20License%2C%20version%202.0/)
+ * @license         GNU GPL 3 (http://www.gnu.org/licenses/gpl.html)
+ * @package         entities-api
+ * @since           2.2.1
+ * @author          Dr. Simon Antony Roberts <simon@snails.email>
+ * @version         2.2.8
+ * @description		A REST API for the storage and management of entities + persons + beingness collaterated!
+ * @link            http://internetfounder.wordpress.com
+ * @link            https://github.com/Chronolabs-Cooperative/Emails-API-PHP
+ * @link            https://sourceforge.net/p/chronolabs-cooperative
+ * @link            https://facebook.com/ChronolabsCoop
+ * @link            https://twitter.com/ChronolabsCoop
+ */
 
 require_once './include/common.inc.php';
 defined('API_INSTALL') || die('API Installation wizard die');
@@ -42,56 +41,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && @$_GET['var'] && @$_GET['action'] ==
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enabled = array();
-    $_SESSION['constants']['minimum']['width'] = $_POST['width'];
-    foreach($wizard->configs['magick'] as $setting => $values)
-    {
-        $_SESSION['constants']['magick'][$setting] = $_POST[$setting];
-        if (is_file($_POST[$setting]))
-        {
-            $enabled[] = $setting;
-        }
-    }
-    $_SESSION['constants']['magick']['enabled'] = implode(',', $enabled);
+    foreach(array('imap','twitter','facebook','linkedin') as $mode)
+        foreach($wizard->configs[$mode] as $setting => $values)
+            $_SESSION['constants'][$mode][$setting] = $_POST[$setting];
     $wizard->redirectToPage('+1');
     return 302;
 }
 ob_start();
 ?>
-    <script type="text/javascript">
-        function removeTrailing(id, val) {
-            if (val[val.length - 1] == '/') {
-                val = val.substr(0, val.length - 1);
-                $(id).value = val;
-            }
-
-            return val;
-        }
-
-        function existingFile(key, val) {
-            val = removeTrailing(key, val);
-            $.get( "<?php echo $_SERVER['PHP_SELF']; ?>", { action: "checkfile", var: key, path: val } )
-                .done(function( tmp ) {
-                    $("#" + key + 'fileimg').html(tmp);
-                });
-            $("#" + key + 'perms').style.display = 'none';
-        }
-    </script>
-    <div class="panel panel-info">
-        <div class="panel-heading"><?php echo API_EXTRAS; ?></div>
+	<div class="panel panel-info">
+    <div class="panel-heading"><?php echo API_EXTRAS; ?></div>
         <div class="panel-body">
+        <?php foreach(array('imap','twitter','facebook','linkedin') as $mode) { ?>
         <div class="form-group">
+        	<div class="xoform-help alert-info"><?php echo constant("API_".strtoupper($mode)."_PARAGRAPH"); ?></div>
             <?php 
-            foreach($wizard->configs['imap'] as $setting => $default)
+            foreach($wizard->configs[$mode] as $setting => $default)
             {?>
-                <div class="form-group">
-                <label for="<?php echo $setting; ?>"><?php echo constant("API_".strtoupper($setting) . "_LABEL"); ?></label>
-                <div class="xoform-help alert alert-info"><?php echo constant("API_".strtoupper($setting) . "_HELP"); ?></div>
+            <div class="form-group">
+                <label for="<?php echo $setting; ?>"><?php echo constant("API_".strtoupper($mode).'_'.strtoupper($setting) . "_LABEL"); ?></label>
+                <div class="xoform-help alert alert-info"><?php echo constant("API_".strtoupper($mode).'_'.strtoupper($setting) . "_HELP"); ?></div>
                 <input type="text" class="form-control" name="<?php echo $setting; ?>" id="<?php echo $setting; ?>" value="<?php echo $default; ?>"/>
             </div>
-            <?php }
-            
-            ?>
+            <?php } ?>
        </div>
+       <?php } ?>
    </div>
 
 <?php
