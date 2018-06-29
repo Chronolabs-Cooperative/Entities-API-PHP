@@ -53,6 +53,14 @@ define('API_IMAP_USERNAME_LABEL','IMAP, SMTP Service for Catch All Username for 
 define('API_IMAP_USERNAME_HELP','This is the service host netbios path name for the IMAP, SMTP Services Username');
 define('API_IMAP_PASSWORD_LABEL','IMAP, SMTP Service for Catch All Password for this domain: ' . parse_url($_SESSION['settings']['URL'], PHP_URL_HOST));
 define('API_IMAP_PASSWORD_HELP','This is the service host netbios path name for the IMAP, SMTP Services Password');
+define('API_URLS_STRATA_URL_LABEL', 'Internet/Transnet Strata REST API (See: <a href="https://github.com/Chronolabs-Cooperative/Strata-API-PHP" target="_blank">github.com...</a>)');
+define('API_URLS_STRATA_URL_HELP', 'You will need to install the Internet/Transnet Strata REST API or use a public version of it!');
+define('API_URLS_LOOKUPS_URL_LABEL', 'IP Lookups REST API (See: <a href="https://github.com/Chronolabs-Cooperative/Lookups-API-PHP" target="_blank">github.com...</a>)');
+define('API_URLS_LOOKUPS_URL_HELP', 'You will need to install the IP Lookups REST API or use a public version of it!');
+define('API_URLS_WHOIS_URL_LABEL', 'IPv4/IPv6/Domain WhoIS Query REST API (See: <a href="https://github.com/Chronolabs-Cooperative/WhoIS-API-PHP" target="_blank">github.com...</a>)');
+define('API_URLS_WHOIS_URL_HELP', 'You will need to install the IPv4/IPv6/Domain WhoIS Query REST API or use a public version of it!');
+define('API_URLS_PLACES_URL_LABEL', 'GeoSpatial Places REST API (See: <a href="https://github.com/Chronolabs-Cooperative/Places-API-PHP" target="_blank">github.com...</a>)');
+define('API_URLS_PLACES_URL_HELP', 'You will need to install the GeoSpatial Places REST API or use a public version of it!');
 define('API_TWITTER_CONSUMER_KEY_LABEL', 'Twitter Consumer Key');
 define('API_TWITTER_CONSUMER_KEY_HELP', 'This is the twitter consumer key found in your twitter application!');
 define('API_TWITTER_CONSUMER_SECRET_LABEL', 'Twitter Consumer Secret');
@@ -74,6 +82,7 @@ define('API_LINKEDIN_CLIENT_SECRET_HELP', 'This is your linkedin.com client secr
 
 // Extra Paragraphs
 define('API_IMAP_PARAGRAPH', 'This is all the mail settings for your entities api, it requires an email address to log onto and check automatically!');
+define('API_URLS_PARAGRAPH', 'This is all the URL\'s settings for your secondary resources as rest api\'s, You will have to install them or use a 3rd party you will find there libraries here: <a href="https://github.com/Chronolabs-Cooperative" target="_blank">https://github.com/Chronolabs-Cooperative/</a>.');
 define('API_TWITTER_PARAGRAPH', 'This is all the Twitter.com application settings for your entities api, you can create these at: <a href="https://apps.twitter.com" target="_blank">https://apps.twitter.com</a>!');
 define('API_FACEBOOK_PARAGRAPH', 'This is all the Facebook.com application settings for your entities api, you can create these at: <a href="https://developers.facebook.com/docs/apps/register/" target="_blank">https://developers.facebook.com/docs/apps/register/</a>!');
 define('API_LINKEDIN_PARAGRAPH', 'This is all the LinkedIn.com application settings for your entities api, you can create these at: <a href="https://www.linkedin.com/secure/developer?newapp=" target="_blank">https://www.linkedin.com/secure/developer?newapp=</a>!');

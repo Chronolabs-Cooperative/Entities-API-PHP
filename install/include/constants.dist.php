@@ -75,3 +75,12 @@ define('API_FACEBOOK_APP_SECRET', '');
 define('API_FACEBOOK_APP_CLIENT_TOKEN', '');
 define('API_LINKEDIN_CLIENT_ID', '');
 define('API_LINKEDIN_CLIENT_SECRET', '');
+
+// REST API URLs
+define('API_URLS_STRATA_URL', '');
+define('API_URLS_LOOKUPS_URL', '');
+define('API_URLS_WHOIS_URL', '');
+define('API_URLS_PLACES_URL', '');
+
+
+?>

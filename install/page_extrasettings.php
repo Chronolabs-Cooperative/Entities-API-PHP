@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && @$_GET['var'] && @$_GET['action'] ==
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $enabled = array();
-    foreach(array('imap','twitter','facebook','linkedin') as $mode)
+    foreach(array('imap','urls','twitter','facebook','linkedin') as $mode)
         foreach($wizard->configs[$mode] as $setting => $values)
             $_SESSION['constants'][$mode][$setting] = $_POST[$setting];
     $wizard->redirectToPage('+1');
@@ -52,7 +52,7 @@ ob_start();
 	<div class="panel panel-info">
     <div class="panel-heading"><?php echo API_EXTRAS; ?></div>
         <div class="panel-body">
-        <?php foreach(array('imap','twitter','facebook','linkedin') as $mode) { ?>
+        <?php foreach(array('imap','urls','twitter','facebook','linkedin') as $mode) { ?>
         <div class="form-group">
         	<div class="xoform-help alert-info"><?php echo constant("API_".strtoupper($mode)."_PARAGRAPH"); ?></div>
             <?php 

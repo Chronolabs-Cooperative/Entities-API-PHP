@@ -69,6 +69,13 @@ $configs['imap'] = array(
     'password'  => ''
 );
 
+$configs['urls'] = array(
+    'strata_url' => 'http://strata.snails.email',
+    'lookups_url' => 'http://lookups.snails.email',
+    'whois_url' => 'http://whois.snails.email',
+    'places_url' => 'http://places.snails.email'
+);
+
 $configs['twitter'] = array(
     'consumer_key' => '',
     'consumer_secret' => '',
