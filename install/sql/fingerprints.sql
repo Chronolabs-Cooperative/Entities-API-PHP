@@ -1,5 +1,5 @@
 
-CREATE TABLE `" . $GLOBALS['APIDB']->prefix('fingerprints') . "` (
+CREATE TABLE `fingerprints` (
   `fingerprint-id` int(30) NOT NULL AUTO_INCREMENT,
   `entity-id` varchar(32) NOT NULL DEFAULT '',
   `import-id` varchar(32) NOT NULL DEFAULT '',

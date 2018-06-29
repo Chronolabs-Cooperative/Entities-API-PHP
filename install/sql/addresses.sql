@@ -1,5 +1,5 @@
 
-CREATE TABLE `" . $GLOBALS['APIDB']->prefix('addresses') . "` (
+CREATE TABLE `addresses` (
   `address-id` varchar(32) NOT NULL DEFAULT '',
   `type` enum('Business','Home','Other','Unknown') NOT NULL DEFAULT 'Unknown',
   `street-one` varchar(100) NOT NULL DEFAULT '',
@@ -15,7 +15,7 @@ CREATE TABLE `" . $GLOBALS['APIDB']->prefix('addresses') . "` (
   `longitude` float(18,12) DEFAULT '0.000000000000',
   `latitude` float(18,12) DEFAULT '0.000000000000',
   `serial-postal` varchar(90) DEFAULT '',
-  `" . $GLOBALS['APIDB']->prefix('entities') . "` int(8) DEFAULT '0',
+  `entities` int(8) DEFAULT '0',
   `created` int(12) DEFAULT '0',
   `updated` int(12) DEFAULT '0',
   `offlined` int(12) DEFAULT '0',
